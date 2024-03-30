@@ -1,0 +1,180 @@
+#weather-app {
+  background: #525252; /* fallback for old browsers */
+  background: -webkit-linear-gradient(
+    to right,
+    #3d72b4,
+    #525252
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    to right,
+    #3d72b4,
+    #525252
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  height: 100vh;
+  width: 100vw;
+  padding-top: 30px;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  overflow: hidden;
+  padding: 100px 90px 100px 90px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  /* From https://css.glass */
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(4.4px);
+  -webkit-backdrop-filter: blur(4.4px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.weather {
+  &__btns {
+    display: flex;
+    margin-bottom: 60px;
+
+    &-wrapper {
+      background-color: rgba(174, 181, 185, 0.5);
+      padding: 13px;
+      border-radius: 7px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      margin-right: 10px;
+    }
+
+    &-location {
+      & svg {
+        width: 30px;
+        height: 30px;
+      }
+    }
+
+    &-lang {
+      outline: none;
+      border: none;
+      cursor: pointer;
+      margin-right: 10px;
+    }
+
+    &-degree {
+      display: flex;
+      align-items: center;
+      text-align: center;
+      line-height: auto;
+      cursor: pointer;
+
+      &_far {
+        border-radius: 7px 0 0 7px;
+        line-height: 30px;
+      }
+
+      &_cel {
+        border-radius: 0 7px 7px 0;
+        line-height: 30px;
+      }
+    }
+  }
+
+  &__city {
+    font-size: toRem(44);
+    font-weight: 900;
+  }
+
+  &__time span {
+    font-size: toRem(24);
+    font-weight: 700;
+  }
+
+  &__conditions {
+    display: flex;
+    // justify-content: space-between;
+
+    &-num {
+      font-size: toRem(250);
+      font-weight: 700;
+    }
+  }
+
+  &__condition {
+    font-size: toRem(28);
+    font-weight: 900;
+    list-style: none;
+    margin-top: auto;
+    padding-bottom: 40px;
+
+    li {
+      line-height: toRem(37);
+    }
+  }
+
+  &__future {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__item {
+    padding-right: 80px;
+    margin-right: 50px;
+    &-day {
+      font-size: toRem(22);
+      font-weight: 900;
+    }
+
+    &-num {
+      font-size: toRem(80);
+      font-weight: 700;
+    }
+  }
+
+  &__control {
+    margin-bottom: auto;
+    &-map {
+      iframe {
+        margin-bottom: toRem(20);
+        border-radius: toRem(25);
+      }
+    }
+
+    &-btn {
+      padding: 13px 20px;
+      font-weight: 900;
+      font-size: toRem(14);
+      border-radius: 0 7px 7px 0;
+      background-color: rgba(174, 181, 185, 0.3);
+      border: none;
+      margin-left: -4px;
+      cursor: pointer;
+    }
+
+    &-coor {
+      font-size: toRem(20);
+      text-align: right;
+      font-weight: 700;
+    }
+  }
+
+  &_form {
+    margin-bottom: toRem(70);
+
+    input {
+      background-color: rgba(76, 82, 85, 0.4);
+      padding: 11px 15px;
+
+      border-radius: 7px 0 0 7px;
+      border: 1px solid #4c5255;
+
+      &::placeholder {
+        font-size: toRem(14);
+        font-weight: 300;
+        color: #fff;
+      }
+    }
+  }
+}

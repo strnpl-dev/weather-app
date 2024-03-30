@@ -6,7 +6,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
       rel="stylesheet"
     />
     <title>Погода</title>
@@ -14,37 +14,91 @@
   <body>
     <div id="weather-app">
       <div class="container">
-        <div class="weather-logo">погодка</div>
-        <div class="weather__info">
-          <div class="weather__info-temp">16&deg;</div>
-          <div class="weather__info-city">Лондон</div>
-          <div class="weather__info-time">2:20</div>
-          <div class="weather__info-date">Пятница, 3/29/2024</div>
-          <div class="weather__info-conditions">
-            <img class="weather__info-icon" src="#" alt="" />
-            <p class="weather__info-text">Облачно</p>
+        <div class="weather">
+          <div class="weather__btns">
+            <div class="weather__btns-location">
+              <span class="weather__btns-wrapper">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                  <path
+                    fill="#ffffff"
+                    d="M256 0c17.7 0 32 14.3 32 32V66.7C368.4 80.1 431.9 143.6 445.3 224H480c17.7 0 32 14.3 32 32s-14.3 32-32 32H445.3C431.9 368.4 368.4 431.9 288 445.3V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V445.3C143.6 431.9 80.1 368.4 66.7 288H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H66.7C80.1 143.6 143.6 80.1 224 66.7V32c0-17.7 14.3-32 32-32zM128 256a128 128 0 1 0 256 0 128 128 0 1 0 -256 0zm128-80a80 80 0 1 1 0 160 80 80 0 1 1 0-160z"
+                  />
+                </svg>
+              </span>
+            </div>
+            <select
+              name="language"
+              class="weather__btns-lang control_btns"
+              id="languageChange"
+            >
+              <option value="eng">EN</option>
+              <option value="rus">RU</option>
+            </select>
+            <div class="weather__btns-degree">
+              <div class="weather__btns-degree_far control_btns notactive_btn">
+                &deg;F
+              </div>
+              <div class="weather__btns-degree_cel control_btns">&deg;C</div>
+            </div>
+          </div>
+          <div class="weather__city">Minsk, Belarus</div>
+          <div class="weather__time">
+            <span class="weather__time-date">Mon 28 October</span>
+            <span class="weather__hour">17:23</span>
+          </div>
+          <div class="weather__conditions">
+            <span class="weather__conditions-num">10&deg;</span>
+            <i>#</i>
+            <ul class="weather__condition">
+              <li>overcast</li>
+              <li>Feels like: 7°</li>
+              <li>Wind: 2 m/s</li>
+              <li>Humidity: 83%</li>
+            </ul>
+          </div>
+          <div class="weather__future">
+            <div class="weather__item">
+              <div class="weather__item-day">today</div>
+              <div class="weather__item-num">7&deg;</div>
+              <div class="weather__item-icon"><img src="#" alt="" /></div>
+            </div>
+
+            <div class="weather__item">
+              <div class="weather__item-day">today</div>
+              <div class="weather__item-num">7&deg;</div>
+              <div class="weather__item-icon"><img src="#" alt="" /></div>
+            </div>
+
+            <div class="weather__item">
+              <div class="weather__item-day">today</div>
+              <div class="weather__item-num">7&deg;</div>
+              <div class="weather__item-icon"><img src="#" alt="" /></div>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div class="panel">
-        <form action="#" id="locationInput">
-          <input type="text" placeholder="Введите название" />
-          <button type="submit"><i></i> search</button>
-        </form>
-        <ul class="panel__cities">
-          <li class="panel__city">Moscow</li>
-          <li class="panel__city">London</li>
-          <li class="panel__city">Belgrade</li>
-          <li class="panel__city">Budapest</li>
-        </ul>
-
-        <ul class="panel__conditions">
-          <h2>Weather Details</h2>
-          <li class="cloudy">cloudy 86%</li>
-          <li class="humidity">cloudy 86%</li>
-          <li class="wind">cloudy 86%</li>
-        </ul>
+        <div class="weather__control">
+          <form action="#" class="weather_form" id="weather_form">
+            <input type="text" placeholder="Введите название города" />
+            <button type="submit" class="weather__control-btn">Искать</button>
+            <i></i>
+          </form>
+          <div class="weather__control-map">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d75252.8687999619!2d27.51096904822529!3d53.884611787837514!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x46dbcfd35b1e6ad3%3A0xb61b853ddb570d9!2sMinsk%2C%20Minsk%20Region%2C%20Belarus!5e0!3m2!1sen!2sru!4v1711729476533!5m2!1sen!2sru"
+              width="355"
+              height="400"
+              style="border: 0"
+              allowfullscreen=""
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+            ></iframe>
+            <div class="weather__control-coor">
+              Latitude: <span class="latitude">53°54'</span> <br />
+              Longitude: <span class="longitude">27°34'</span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <script type="module" src="/src/js/main.js"></script>
