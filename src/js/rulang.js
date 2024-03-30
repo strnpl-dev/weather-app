@@ -1,0 +1,5 @@
+const langArr = {
+
+}
+
+export { langArr }

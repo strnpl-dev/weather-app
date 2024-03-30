@@ -20,8 +20,13 @@ a {
   padding: 13px 15px;
   color: #fff;
   font-weight: 900;
+  opacity: 0.4;
 }
 
-.notactive_btn {
-  opacity: 0.4;
+.weather__btns-lang.control_btns {
+  opacity: 1;
+}
+
+.active_btn {
+  opacity: 1;
 }

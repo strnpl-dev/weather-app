@@ -9,6 +9,7 @@
       href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
       rel="stylesheet"
     />
+    <script src="https://api-maps.yandex.ru/v3/?apikey=83c35695-8da5-419d-81ae-38b8f3a6dcc0&lang=ru_RU"></script>
     <title>Погода</title>
   </head>
   <body>
@@ -31,14 +32,26 @@
               class="weather__btns-lang control_btns"
               id="languageChange"
             >
-              <option value="eng">EN</option>
               <option value="rus">RU</option>
+              <option value="eng">EN</option>
             </select>
             <div class="weather__btns-degree">
-              <div class="weather__btns-degree_far control_btns notactive_btn">
-                &deg;F
-              </div>
-              <div class="weather__btns-degree_cel control_btns">&deg;C</div>
+              <label for="degree_far">
+                <input type="radio" name="degree" id="degree_far" />
+                <div class="weather__btns-degree_far control_btns degree_btns">
+                  &deg;F
+                </div>
+              </label>
+
+              <label for="degree_cels">
+                <input type="radio" name="degree" id="degree_cels" checked />
+
+                <div
+                  class="weather__btns-degree_cel control_btns degree_btns active_btn"
+                >
+                  &deg;C
+                </div>
+              </label>
             </div>
           </div>
           <div class="weather__city">Minsk, Belarus</div>
@@ -48,12 +61,16 @@
           </div>
           <div class="weather__conditions">
             <span class="weather__conditions-num">10&deg;</span>
-            <i>#</i>
+            <img
+              class="weather__conditions-icon"
+              src="/public/icons/clear.png"
+              alt=""
+            />
             <ul class="weather__condition">
-              <li>overcast</li>
-              <li>Feels like: 7°</li>
-              <li>Wind: 2 m/s</li>
-              <li>Humidity: 83%</li>
+              <li class="weather__condition-text">overcast</li>
+              <li>Feels like: <span class="feelsLike">7°</span></li>
+              <li>Wind: <span class="windSpeed">2 m/s</span></li>
+              <li>Humidity: <span class="humidityNum">83%</span></li>
             </ul>
           </div>
           <div class="weather__future">
@@ -78,13 +95,23 @@
         </div>
 
         <div class="weather__control">
-          <form action="#" class="weather_form" id="weather_form">
-            <input type="text" placeholder="Введите название города" />
+          <form
+            action="#"
+            class="weather_form"
+            id="weather_form"
+            name="cityName"
+          >
+            <input
+              type="text"
+              id="form__name"
+              placeholder="Введите название города"
+            />
             <button type="submit" class="weather__control-btn">Искать</button>
             <i></i>
           </form>
           <div class="weather__control-map">
-            <iframe
+            <div id="map" style="width: 355px; height: 400px"></div>
+            <!-- <iframe
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d75252.8687999619!2d27.51096904822529!3d53.884611787837514!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x46dbcfd35b1e6ad3%3A0xb61b853ddb570d9!2sMinsk%2C%20Minsk%20Region%2C%20Belarus!5e0!3m2!1sen!2sru!4v1711729476533!5m2!1sen!2sru"
               width="355"
               height="400"
@@ -92,7 +119,7 @@
               allowfullscreen=""
               loading="lazy"
               referrerpolicy="no-referrer-when-downgrade"
-            ></iframe>
+            ></iframe> -->
             <div class="weather__control-coor">
               Latitude: <span class="latitude">53°54'</span> <br />
               Longitude: <span class="longitude">27°34'</span>
