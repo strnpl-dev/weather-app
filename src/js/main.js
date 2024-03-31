@@ -5,7 +5,7 @@ import '../scss/style.scss';
 
 window.addEventListener('DOMContentLoaded', () => {
 
-    const locationBtn = document.querySelector('weather__btns-wrapper'),
+    const locationBtn = document.querySelector('.weather__btns-wrapper'),
         languageChange = document.querySelector('#languageChange'),
         fahrsToggle = document.querySelector('#degree_far'),
         celsToggle = document.querySelector('#degree_cels'),
@@ -25,6 +25,32 @@ window.addEventListener('DOMContentLoaded', () => {
         longitude = document.querySelector('.longitude'),
         apiLink = 'http://api.weatherapi.com/v1/current.json?key=81cd96a4cf8f4303b5e111110242903&q=',
         weatherIcon = document.querySelector('.weather__conditions-icon')
+
+
+    locationBtn.addEventListener('click', () => {
+        yourLocationWeather()
+    })
+
+
+    const yourLocationWeather = () => {
+
+        function success(position) {
+
+            navigator.geolocation.getCurrentPosition((position) => {
+                fetchData(`${position.coords.latitude}, ${position.coords.longitude}`);
+            });
+        }
+
+        function error() {
+            alert("Unable to retrieve your location");
+        }
+
+        if (!navigator.geolocation) {
+            alert("Geolocation is not supported by your browser");
+        } else {
+            navigator.geolocation.getCurrentPosition(success, error);
+        }
+    }
 
     function getMonthName(month) {
         const monthNames = ["January", "February", "March", "April", "May", "June",
@@ -173,8 +199,6 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 
     fetchData('Moscow')
-    console.dir(fahrsToggle)
-
 
     locationForm.addEventListener('submit', (evt) => {
         evt.preventDefault()
