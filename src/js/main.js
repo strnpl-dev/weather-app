@@ -1,6 +1,6 @@
 import '../scss/style.scss';
 import i18next from 'https://deno.land/x/i18next/index.js';
-import { updateMap, changeMapLang } from './map';
+import { updateMap } from './map';
 
 
 'use strict'
@@ -17,7 +17,7 @@ window.addEventListener('DOMContentLoaded', () => {
         time = document.querySelector('.weather__hour'),
         weatherNum = document.querySelector('.weather__conditions-num'),
         weatherDescription = document.querySelector('.weather__condition-text'),
-        futureNums = document.querySelectorAll('.weather__item-num'),
+        daytimeCond = Array.from(document.querySelectorAll('[data-daytime]')),
         windSpeed = document.querySelector('.windSpeed'),
         humidityNum = document.querySelector('.humidityNum'),
         feelsLike = document.querySelector('.feelsLike'),
@@ -25,8 +25,9 @@ window.addEventListener('DOMContentLoaded', () => {
         formInput = document.querySelector('#weather_form input'),
         latitude = document.querySelector('.latitude'),
         longitude = document.querySelector('.longitude'),
-        apiLink = 'http://api.weatherapi.com/v1/current.json?key=81cd96a4cf8f4303b5e111110242903&q=',
-        weatherIcon = document.querySelector('.weather__conditions-icon')
+        apiLink = 'http://api.weatherapi.com/v1/forecast.json?key=81cd96a4cf8f4303b5e111110242903&q=',
+        weatherIcon = document.querySelector('.weather__conditions-icon'),
+        forecastIcons = Array.from(document.querySelectorAll('.weather__item-icon img'))
 
 
     i18next.init({
@@ -45,6 +46,31 @@ window.addEventListener('DOMContentLoaded', () => {
             }
         }
     });
+
+    const handleForecastIcon = (conditionInformation, iconEl) => {
+        switch (conditionInformation) {
+            case ("Partly Cloudy"):
+                iconEl.src = '/public/icons/partly.png'
+                break;
+
+            case ("Sunny"):
+                iconEl.src = '/public/icons/sunny.png'
+                break;
+
+            case ("Cloudy"):
+                iconEl.src = '/public/icons/cloud.png'
+                break;
+
+            case ("Clear"):
+                iconEl.src = '/public/icons/clear.png'
+                break;
+
+            case ("Mist"):
+                iconEl.src = '/public/icons/fog.png'
+                break;
+        }
+    }
+
 
     const yourLocationWeather = () => {
 
@@ -65,14 +91,6 @@ window.addEventListener('DOMContentLoaded', () => {
             navigator.geolocation.getCurrentPosition(success, error);
         }
     }
-
-    languageChange.addEventListener('change', (evt) => {
-        let changeRU = 'ru_RU'
-        let changeEN = 'en_RU'
-
-        let mapUrl = `https://api-maps.yandex.ru/2.1/?apikey=83c35695-8da5-419d-81ae-38b8f3a6dcc0&lang=${changeRU}`
-        evt.target.value === 'eng' ? changeMapLang() : console.log('error')
-    })
 
     locationBtn.addEventListener('click', yourLocationWeather)
 
@@ -110,12 +128,22 @@ window.addEventListener('DOMContentLoaded', () => {
     fahrsToggle.addEventListener('click', () => {
         feelsLike.textContent = trimDegrees(store.feelslike_f)
         weatherNum.textContent = trimDegrees(store.temp_f)
+
+        daytimeCond[0].textContent = trimDegrees(store.forecastday[0].hour[0].temp_f)
+        daytimeCond[1].textContent = trimDegrees(store.forecastday[0].hour[12].temp_f)
+        daytimeCond[2].textContent = trimDegrees(store.forecastday[0].hour[21].temp_f)
+
         localStorage.setItem('preferredDeg', 'fahr')
     })
 
     celsToggle.addEventListener('click', () => {
         feelsLike.textContent = trimDegrees(store.feelslike_c)
         weatherNum.textContent = trimDegrees(store.temp_c)
+
+        daytimeCond[0].textContent = trimDegrees(store.forecastday[0].hour[0].temp_c)
+        daytimeCond[1].textContent = trimDegrees(store.forecastday[0].hour[12].temp_c)
+        daytimeCond[2].textContent = trimDegrees(store.forecastday[0].hour[21].temp_c)
+
         localStorage.setItem('preferredDeg', 'cels')
     })
 
@@ -125,8 +153,6 @@ window.addEventListener('DOMContentLoaded', () => {
             el.classList.remove('active_btn')
         })
         fahrsToggle.classList.add('active_btn')
-        console.log(fahrsToggle.classList)
-
 
     } else {
         celsToggle.checked = true;
@@ -138,7 +164,6 @@ window.addEventListener('DOMContentLoaded', () => {
                 if (el !== btn) {
 
                     el.classList.remove('active_btn')
-                    console.log(el.classList)
                 }
             })
 
@@ -162,16 +187,16 @@ window.addEventListener('DOMContentLoaded', () => {
         text: ''
     }
 
-    // let myMap
-
     const fetchData = async (cityInp) => {
         const res = await fetch(apiLink + cityInp)
         const newData = await res.json()
+        console.log(newData)
 
         let { current: { feelslike_c, feelslike_f, temp_f, temp_c, wind_kph, humidity, condition: text },
             location: {
                 name: city, country, lat, lon, localtime
-            }
+            },
+            forecast: { forecastday }
         } = newData
 
         store = {
@@ -187,30 +212,44 @@ window.addEventListener('DOMContentLoaded', () => {
             lat,
             lon,
             localtime,
-            condition: text
+            condition: text,
+            forecastday
         }
 
-        switch (store.condition.text) {
-            case ("Partly cloudy"):
-                weatherIcon.src = '/public/icons/partly.png'
-                break;
 
-            case ("Sunny"):
-                weatherIcon.src = '/public/icons/sunny.png'
-                break;
 
-            case ("Cloudy"):
-                weatherIcon.src = '/public/icons/cloud.png'
-                break;
 
-            case ("Clear"):
-                weatherIcon.src = '/public/icons/clear.png'
-                break;
+        handleForecastIcon(store.condition.text, weatherIcon)
+        // handleForecastIcon(store.forecastday[0].hour[0].condition.text, forecastIcons[0])
+        // handleForecastIcon(store.forecastday[0].hour[12].condition.text, forecastIcons[1])
+        // handleForecastIcon(store.forecastday[0].hour[21].condition.text, forecastIcons[2])
 
-            case ("Mist"):
-                weatherIcon.src = '/public/icons/fog.png'
-                break;
-        }
+        forecastIcons[0].src = store.forecastday[0].hour[0].condition.icon
+        forecastIcons[1].src = store.forecastday[0].hour[12].condition.icon
+        forecastIcons[2].src = store.forecastday[0].hour[21].condition.icon
+
+        console.log(store.forecastday[0].hour[12].condition.text)
+        // switch (conditionInformation) {
+        //     case ("Partly cloudy"):
+        //         weatherIcon.src = '/public/icons/partly.png'
+        //         break;
+
+        //     case ("Sunny"):
+        //         weatherIcon.src = '/public/icons/sunny.png'
+        //         break;
+
+        //     case ("Cloudy"):
+        //         weatherIcon.src = '/public/icons/cloud.png'
+        //         break;
+
+        //     case ("Clear"):
+        //         weatherIcon.src = '/public/icons/clear.png'
+        //         break;
+
+        //     case ("Mist"):
+        //         weatherIcon.src = '/public/icons/fog.png'
+        //         break;
+        // }
 
         weatherDescription.textContent = store.condition.text
         date.textContent = formatDate(store.localtime.split(' ')[0])
@@ -224,23 +263,20 @@ window.addEventListener('DOMContentLoaded', () => {
         if (fahrsToggle.checked) {
             feelsLike.textContent = trimDegrees(store.feelslike_f)
             weatherNum.textContent = trimDegrees(store.temp_f)
+
+            daytimeCond[0].textContent = trimDegrees(store.forecastday[0].hour[0].temp_f)
+            daytimeCond[1].textContent = trimDegrees(store.forecastday[0].hour[12].temp_f)
+            daytimeCond[2].textContent = trimDegrees(store.forecastday[0].hour[21].temp_f)
         } else {
             feelsLike.textContent = trimDegrees(store.feelslike_c)
             weatherNum.textContent = trimDegrees(store.temp_c)
+
+            daytimeCond[0].textContent = trimDegrees(store.forecastday[0].hour[0].temp_c)
+            daytimeCond[1].textContent = trimDegrees(store.forecastday[0].hour[12].temp_c)
+            daytimeCond[2].textContent = trimDegrees(store.forecastday[0].hour[21].temp_c)
         }
         updateMap(store.lat, store.lon);
     }
-
-    // function updateMap(lat, lon) {
-    //     if (myMap) {
-    //         myMap.setCenter([lat, lon]);
-    //     } else {
-    //         myMap = new ymaps.Map("map", {
-    //             center: [lat, lon],
-    //             zoom: 7,
-    //         });
-    //     }
-    // }
 
     fetchData('Moscow')
 

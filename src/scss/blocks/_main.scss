@@ -131,7 +131,6 @@
 
   &__item {
     padding-right: 80px;
-    margin-right: 50px;
     &-day {
       font-size: toRem(22);
       font-weight: 900;
@@ -140,6 +139,18 @@
     &-num {
       font-size: toRem(80);
       font-weight: 700;
+    }
+
+    &-icon {
+      position: relative;
+
+      img {
+        position: absolute;
+        width: 80px;
+        top: -85px;
+        right: -65px;
+        z-index: -1;
+      }
     }
   }
 
