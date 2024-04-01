@@ -13,6 +13,7 @@
     "vite": "^5.2.0"
   },
   "dependencies": {
+    "i18next": "^23.10.1",
     "normalize.css": "^8.0.1"
   }
 }

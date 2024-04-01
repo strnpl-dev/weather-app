@@ -1,5 +1,7 @@
 import '../scss/style.scss';
-// import { langArr } from './rulang'
+import i18next from 'https://deno.land/x/i18next/index.js';
+import { updateMap, changeMapLang } from './map';
+
 
 'use strict'
 
@@ -27,10 +29,22 @@ window.addEventListener('DOMContentLoaded', () => {
         weatherIcon = document.querySelector('.weather__conditions-icon')
 
 
-    locationBtn.addEventListener('click', () => {
-        yourLocationWeather()
-    })
-
+    i18next.init({
+        lng: 'en',
+        debug: true,
+        resources: {
+            en: {
+                translation: {
+                    "eng": "hello world"
+                }
+            },
+            ru: {
+                translation: {
+                    "first": "привет мир"
+                }
+            }
+        }
+    });
 
     const yourLocationWeather = () => {
 
@@ -51,6 +65,16 @@ window.addEventListener('DOMContentLoaded', () => {
             navigator.geolocation.getCurrentPosition(success, error);
         }
     }
+
+    languageChange.addEventListener('change', (evt) => {
+        let changeRU = 'ru_RU'
+        let changeEN = 'en_RU'
+
+        let mapUrl = `https://api-maps.yandex.ru/2.1/?apikey=83c35695-8da5-419d-81ae-38b8f3a6dcc0&lang=${changeRU}`
+        evt.target.value === 'eng' ? changeMapLang() : console.log('error')
+    })
+
+    locationBtn.addEventListener('click', yourLocationWeather)
 
     function getMonthName(month) {
         const monthNames = ["January", "February", "March", "April", "May", "June",
@@ -97,6 +121,13 @@ window.addEventListener('DOMContentLoaded', () => {
 
     if (localStorage.getItem('preferredDeg') === 'fahr') {
         fahrsToggle.checked = true;
+        controlBtns.forEach(el => {
+            el.classList.remove('active_btn')
+        })
+        fahrsToggle.classList.add('active_btn')
+        console.log(fahrsToggle.classList)
+
+
     } else {
         celsToggle.checked = true;
     }
@@ -107,6 +138,7 @@ window.addEventListener('DOMContentLoaded', () => {
                 if (el !== btn) {
 
                     el.classList.remove('active_btn')
+                    console.log(el.classList)
                 }
             })
 
@@ -130,6 +162,8 @@ window.addEventListener('DOMContentLoaded', () => {
         text: ''
     }
 
+    // let myMap
+
     const fetchData = async (cityInp) => {
         const res = await fetch(apiLink + cityInp)
         const newData = await res.json()
@@ -139,8 +173,6 @@ window.addEventListener('DOMContentLoaded', () => {
                 name: city, country, lat, lon, localtime
             }
         } = newData
-
-        // console.log(newData)
 
         store = {
             ...store,
@@ -196,7 +228,19 @@ window.addEventListener('DOMContentLoaded', () => {
             feelsLike.textContent = trimDegrees(store.feelslike_c)
             weatherNum.textContent = trimDegrees(store.temp_c)
         }
+        updateMap(store.lat, store.lon);
     }
+
+    // function updateMap(lat, lon) {
+    //     if (myMap) {
+    //         myMap.setCenter([lat, lon]);
+    //     } else {
+    //         myMap = new ymaps.Map("map", {
+    //             center: [lat, lon],
+    //             zoom: 7,
+    //         });
+    //     }
+    // }
 
     fetchData('Moscow')
 
@@ -209,32 +253,4 @@ window.addEventListener('DOMContentLoaded', () => {
         formInput.value = ''
 
     })
-
-    initMap();
-
-    async function initMap() {
-        await ymaps3.ready;
-
-        const { YMap, YMapDefaultSchemeLayer } = ymaps3;
-
-        const map = new YMap(
-            document.getElementById('map'),
-            {
-                location: {
-                    center: [37.588144, 55.733842],
-                    zoom: 10
-                }
-            }
-
-
-        );
-
-        map.setLocation({
-            center: [store.lat, store.lon],
-            zoom: 5
-        });
-
-        map.addChild(new YMapDefaultSchemeLayer());
-    }
-
 })

@@ -9,7 +9,10 @@
       href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
       rel="stylesheet"
     />
-    <script src="https://api-maps.yandex.ru/v3/?apikey=83c35695-8da5-419d-81ae-38b8f3a6dcc0&lang=ru_RU"></script>
+    <script
+      src="https://api-maps.yandex.ru/2.1/?apikey=83c35695-8da5-419d-81ae-38b8f3a6dcc0&lang=ru_RU"
+      type="text/javascript"
+    ></script>
     <title>Погода</title>
   </head>
   <body>
@@ -32,8 +35,8 @@
               class="weather__btns-lang control_btns"
               id="languageChange"
             >
-              <option value="rus">RU</option>
               <option value="eng">EN</option>
+              <option value="rus">RU</option>
             </select>
             <div class="weather__btns-degree">
               <label for="degree_far">
@@ -128,6 +131,7 @@
         </div>
       </div>
     </div>
+
     <script type="module" src="/src/js/main.js"></script>
   </body>
 </html>
