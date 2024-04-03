@@ -9,8 +9,8 @@ window.addEventListener('DOMContentLoaded', () => {
 
     const locationBtn = document.querySelector('.weather__btns-wrapper'),
         languageChange = document.querySelector('#languageChange'),
-        fahrsToggle = document.querySelector('#degree_far'),
-        celsToggle = document.querySelector('#degree_cels'),
+        fahrsToggle = document.querySelector('.weather__btns-degree_far'),
+        celsToggle = document.querySelector('.weather__btns-degree_cel'),
         controlBtns = document.querySelectorAll('.degree_btns'),
         cityName = document.querySelector('.weather__city'),
         date = document.querySelector('.weather__time-date'),
@@ -78,12 +78,6 @@ window.addEventListener('DOMContentLoaded', () => {
     //     afterLang.textContent = i18next.t('afternoon');
     //     nightLang.textContent = i18next.t('night');
     //     feelsLang.textContent = i18next.t('feelsLike')
-
-    //     humidityLang.textContent = `
-    //     ${i18next.t('humidity')} ${store.longitude}`
-
-    //     windLang.textContent = `
-    //     ${i18next.t('wind')} <span class="windSpeed"></span>`
     // }
 
     // function changeLng(lng) {
@@ -110,6 +104,9 @@ window.addEventListener('DOMContentLoaded', () => {
             navigator.geolocation.getCurrentPosition((position) => {
                 fetchData(`${position.coords.latitude}, ${position.coords.longitude}`);
             });
+
+            localStorage.setItem('lastLocation', `${position.coords.latitude}, ${position.coords.longitude}`)
+
         }
 
         function error() {
@@ -178,17 +175,6 @@ window.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem('preferredDeg', 'cels')
     })
 
-    if (localStorage.getItem('preferredDeg') === 'fahr') {
-        fahrsToggle.checked = true;
-        fahrsToggle.classList.add('active_btn')
-        celsToggle.classList.remove('active_btn')
-
-    } else {
-        celsToggle.checked = true;
-        fahrsToggle.classList.remove('active_btn')
-        celsToggle.classList.add('active_btn')
-    }
-
     controlBtns.forEach(btn => {
         btn.addEventListener('click', () => {
             controlBtns.forEach(el => {
@@ -201,6 +187,20 @@ window.addEventListener('DOMContentLoaded', () => {
             btn.classList.add('active_btn')
         })
     })
+
+    if (localStorage.getItem('preferredDeg') === 'fahr') {
+        fahrsToggle.checked = true;
+        fahrsToggle.classList.add('active_btn')
+        celsToggle.classList.remove('active_btn')
+
+    } else if (localStorage.getItem('preferredDeg') === 'cels') {
+        celsToggle.checked = true;
+        fahrsToggle.classList.remove('active_btn')
+        celsToggle.classList.add('active_btn')
+    } else {
+        celsToggle.classList.add('active_btn')
+        console.log('1')
+    }
 
     let store = {
         city: 'Moscow',
