@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
+    <script
+      src="https://api-maps.yandex.ru/2.1/?apikey=83c35695-8da5-419d-81ae-38b8f3a6dcc0&lang=ru_RU"
+      type="text/javascript"
+    ></script>
+    <title>Weather</title>
+    <script type="module" crossorigin src="/assets/index-Db1ZaCpA.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-COcYqyxx.css">
+  </head>
+  <body>
+    <div id="weather-app">
+      <div class="container">
+        <div class="weather">
+          <div class="weather__btns">
+            <div class="weather__btns-location">
+              <span class="weather__btns-wrapper">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                  <path
+                    fill="#ffffff"
+                    d="M256 0c17.7 0 32 14.3 32 32V66.7C368.4 80.1 431.9 143.6 445.3 224H480c17.7 0 32 14.3 32 32s-14.3 32-32 32H445.3C431.9 368.4 368.4 431.9 288 445.3V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V445.3C143.6 431.9 80.1 368.4 66.7 288H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H66.7C80.1 143.6 143.6 80.1 224 66.7V32c0-17.7 14.3-32 32-32zM128 256a128 128 0 1 0 256 0 128 128 0 1 0 -256 0zm128-80a80 80 0 1 1 0 160 80 80 0 1 1 0-160z"
+                  />
+                </svg>
+              </span>
+            </div>
+            <select
+              name="language"
+              class="weather__btns-lang control_btns"
+              id="languageChange"
+            >
+              <option value="eng">EN</option>
+              <option value="rus">RU</option>
+            </select>
+            <div class="weather__btns-degree">
+              <label for="degree_far">
+                <input type="radio" name="degree" id="degree_far" />
+                <div
+                  class="weather__btns-degree_far control_btns degree_btns"
+                  data-degree-="fahr"
+                >
+                  &deg;F
+                </div>
+              </label>
+
+              <label for="degree_cels">
+                <input type="radio" name="degree" id="degree_cels" checked />
+
+                <div
+                  class="weather__btns-degree_cel control_btns degree_btns"
+                  data-degree-="cel"
+                >
+                  &deg;C
+                </div>
+              </label>
+            </div>
+          </div>
+          <div class="weather__city">Minsk, Belarus</div>
+          <div class="weather__time">
+            <span class="weather__time-date">Mon 28 October</span>
+            <span class="weather__hour">17:23</span>
+          </div>
+          <div class="weather__conditions">
+            <span class="weather__conditions-num">10&deg;</span>
+            <img
+              class="weather__conditions-icon"
+              src="icons/clear.png"
+              alt=""
+            />
+            <ul class="weather__condition">
+              <li class="weather__condition-text">overcast</li>
+              <li class="feelsLang">
+                Feels like: <span class="feelsLike">7°</span>
+              </li>
+              <li class="windLang">
+                Wind: <span class="windSpeed">2 m/s</span>
+              </li>
+              <li class="humidityLang">
+                Humidity: <span class="humidityNum">83%</span>
+              </li>
+            </ul>
+          </div>
+          <div class="weather__future">
+            <div class="weather__item">
+              <div class="weather__item-day morningLang">morning</div>
+              <div class="weather__item-num" data-daytime="morning">7&deg;</div>
+              <div class="weather__item-icon"><img src="#" alt="" /></div>
+            </div>
+
+            <div class="weather__item">
+              <div class="weather__item-day afterLang">afternoon</div>
+              <div class="weather__item-num" data-daytime="afternoon">
+                7&deg;
+              </div>
+              <div class="weather__item-icon">
+                <img src="#" alt="" />
+              </div>
+            </div>
+
+            <div class="weather__item">
+              <div class="weather__item-day nightLang">night</div>
+              <div class="weather__item-num" data-daytime="night">7&deg;</div>
+              <div class="weather__item-icon"><img src="#" alt="" /></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="weather__control">
+          <form
+            action="#"
+            class="weather_form"
+            id="weather_form"
+            name="cityName"
+          >
+            <input type="text" id="form__name" placeholder="Enter city name" />
+            <button type="submit" class="weather__control-btn">Search</button>
+            <i></i>
+          </form>
+          <div class="weather__control-map">
+            <div id="map" style="width: 355px; height: 400px"></div>
+            <div class="weather__control-coor">
+              Latitude: <span class="latitude">53°54'</span> <br />
+              Longitude: <span class="longitude">27°34'</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </body>
+</html>
