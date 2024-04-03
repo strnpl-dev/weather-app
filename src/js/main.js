@@ -27,70 +27,80 @@ window.addEventListener('DOMContentLoaded', () => {
         longitude = document.querySelector('.longitude'),
         apiLink = 'http://api.weatherapi.com/v1/forecast.json?key=81cd96a4cf8f4303b5e111110242903&q=',
         weatherIcon = document.querySelector('.weather__conditions-icon'),
-        forecastIcons = Array.from(document.querySelectorAll('.weather__item-icon img'))
+        forecastIcons = Array.from(document.querySelectorAll('.weather__item-icon img')),
+        morningLang = document.querySelector('.morningLang'),
+        afterLang = document.querySelector('.afterLang'),
+        nightLang = document.querySelector('.nightLang'),
+        feelsLang = document.querySelector('.feelsLang'),
+        windLang = document.querySelector('.windLang'),
+        humidityLang = document.querySelector('.humidityLang')
 
+    // i18next.init({
+    //     lng: 'en',
+    //     debug: true,
+    //     resources: {
+    //         en: {
+    //             translation: {
+    //                 "feelsLike": "Feels like:",
+    //                 'wind': 'Wind:',
+    //                 'humidity': 'Longitude:',
+    //                 'morning': 'morning',
+    //                 'afternoon': 'morning',
+    //                 'night': 'morning',
+    //                 'placeholder': 'Enter city name',
+    //                 'btn': 'Search',
+    //                 'lat': 'Latitude',
+    //                 'lon': 'Longitude'
+    //             }
+    //         },
+    //         ru: {
+    //             translation: {
+    //                 "feelsLike": "Ощущается:",
+    //                 'wind': 'Ветер:',
+    //                 'humidity': 'Влажность:',
+    //                 'morning': 'утро',
+    //                 'afternoon': 'день',
+    //                 'night': 'ночь',
+    //                 'placeholder': 'Введите название города',
+    //                 'btn': 'Искать',
+    //                 'lat': 'Ширина',
+    //                 'lon': 'Долгота'
+    //             }
+    //         }
+    //     },
+    //     parseElements: ['span'],
+    // }, function (err, t) {
+    //     updateContent();
+    // });
 
+    // function updateContent() {
+    //     morningLang.textContent = i18next.t('morning');
+    //     afterLang.textContent = i18next.t('afternoon');
+    //     nightLang.textContent = i18next.t('night');
+    //     feelsLang.textContent = i18next.t('feelsLike')
 
-    i18next.init({
-        lng: 'en',
-        debug: true,
-        resources: {
-            en: {
-                translation: {
-                    "feelsLike": "Feels like:",
-                    'wind': 'Wind:',
-                    'humidity': 'Longitude:',
-                    'morning': 'morning',
-                    'afternoon': 'morning',
-                    'night': 'morning',
-                    'placeholder': 'Enter city name',
-                    'btn': 'Search',
-                    'lat': 'Latitude',
-                    'lon': 'Longitude'
-                }
-            },
-            ru: {
-                translation: {
-                    "feelsLike": "Ощущается:",
-                    'wind': 'Ветер:',
-                    'humidity': 'Влажность:',
-                    'morning': 'утро',
-                    'afternoon': 'день',
-                    'night': 'ночь',
-                    'placeholder': 'Введите название города',
-                    'btn': 'Искать',
-                    'lat': 'Ширина',
-                    'lon': 'Долгота'
-                }
-            }
-        }
-    }, function (err, t) {
-        // init set content
-        updateContent();
-    });
+    //     humidityLang.textContent = `
+    //     ${i18next.t('humidity')} ${store.longitude}`
 
-    function updateContent() {
-        feelsLike.parentElement.textContent = i18next.t('feelsLike');
-        // document.getElementById('saveBtn').innerHTML = i18next.t('common:button.save', { count: Math.floor(Math.random() * 2 + 1) });
+    //     windLang.textContent = `
+    //     ${i18next.t('wind')} <span class="windSpeed"></span>`
+    // }
 
-        // document.getElementById('info').innerHTML = `detected user language: "${i18next.language}"  --> loaded languages: "${i18next.languages.join(', ')}"`;
-    }
-
-    function changeLng(lng) {
-        i18next.changeLanguage(lng);
-    }
+    // function changeLng(lng) {
+    //     i18next.changeLanguage(lng);
+    // }
 
     // i18next.on('languageChanged', () => {
     //     updateContent();
     // });
 
-
-
-    languageChange.addEventListener('change', (evt) => {
-        if (evt.target.value === 'ru') {
-            i18next.changeLng('ru')
-        }
-    })
+    // languageChange.addEventListener('change', (evt) => {
+    //     if (evt.target.value === 'rus') {
+    //         changeLng('ru');
+    //     } else {
+    //         changeLng('en');
+    //     }
+    // });
 
 
     const yourLocationWeather = () => {
@@ -100,7 +110,6 @@ window.addEventListener('DOMContentLoaded', () => {
             navigator.geolocation.getCurrentPosition((position) => {
                 fetchData(`${position.coords.latitude}, ${position.coords.longitude}`);
             });
-
         }
 
         function error() {
@@ -212,7 +221,6 @@ window.addEventListener('DOMContentLoaded', () => {
     const fetchData = async (cityInp) => {
         const res = await fetch(apiLink + cityInp)
         const newData = await res.json()
-        console.log(newData)
 
         let { current: { feelslike_c, feelslike_f, temp_f, temp_c, wind_kph, humidity, condition: text },
             location: {
@@ -272,7 +280,6 @@ window.addEventListener('DOMContentLoaded', () => {
         time.textContent = store.localtime.split(' ')[1]
         windSpeed.textContent = store.wind_kph + ' kph'
         humidityNum.textContent = store.humidity + '%'
-        localStorage.setItem('lastLocation', store.city)
 
         if (fahrsToggle.checked) {
             feelsLike.textContent = trimDegrees(store.feelslike_f)
@@ -292,8 +299,6 @@ window.addEventListener('DOMContentLoaded', () => {
         updateMap(store.lat, store.lon);
     }
 
-    console.log(fetchData('Moscow'))
-
     if (localStorage.getItem('lastLocation') !== '' && localStorage.getItem('lastLocation') !== null) {
         fetchData(localStorage.getItem('lastLocation'))
     } else {
@@ -305,6 +310,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
         const inputName = document.getElementById('form__name').value
         fetchData(inputName)
+        localStorage.setItem('lastLocation', inputName)
 
         formInput.value = ''
 

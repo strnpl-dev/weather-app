@@ -53,7 +53,7 @@
                 <input type="radio" name="degree" id="degree_cels" checked />
 
                 <div
-                  class="weather__btns-degree_cel control_btns degree_btns active_btn"
+                  class="weather__btns-degree_cel control_btns degree_btns"
                   data-degree-="cel"
                 >
                   &deg;C
@@ -75,28 +75,36 @@
             />
             <ul class="weather__condition">
               <li class="weather__condition-text">overcast</li>
-              <li>Feels like: <span class="feelsLike">7°</span></li>
-              <li>Wind: <span class="windSpeed">2 m/s</span></li>
-              <li>Humidity: <span class="humidityNum">83%</span></li>
+              <li class="feelsLang">
+                Feels like: <span class="feelsLike">7°</span>
+              </li>
+              <li class="windLang">
+                Wind: <span class="windSpeed">2 m/s</span>
+              </li>
+              <li class="humidityLang">
+                Humidity: <span class="humidityNum">83%</span>
+              </li>
             </ul>
           </div>
           <div class="weather__future">
             <div class="weather__item">
-              <div class="weather__item-day">morning</div>
+              <div class="weather__item-day morningLang">morning</div>
               <div class="weather__item-num" data-daytime="morning">7&deg;</div>
               <div class="weather__item-icon"><img src="#" alt="" /></div>
             </div>
 
             <div class="weather__item">
-              <div class="weather__item-day">afternoon</div>
+              <div class="weather__item-day afterLang">afternoon</div>
               <div class="weather__item-num" data-daytime="afternoon">
                 7&deg;
               </div>
-              <div class="weather__item-icon"><img src="#" alt="" /></div>
+              <div class="weather__item-icon">
+                <img src="#" alt="" />
+              </div>
             </div>
 
             <div class="weather__item">
-              <div class="weather__item-day">night</div>
+              <div class="weather__item-day nightLang">night</div>
               <div class="weather__item-num" data-daytime="night">7&deg;</div>
               <div class="weather__item-icon"><img src="#" alt="" /></div>
             </div>
