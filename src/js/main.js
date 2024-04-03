@@ -30,46 +30,67 @@ window.addEventListener('DOMContentLoaded', () => {
         forecastIcons = Array.from(document.querySelectorAll('.weather__item-icon img'))
 
 
+
     i18next.init({
         lng: 'en',
         debug: true,
         resources: {
             en: {
                 translation: {
-                    "eng": "hello world"
+                    "feelsLike": "Feels like:",
+                    'wind': 'Wind:',
+                    'humidity': 'Longitude:',
+                    'morning': 'morning',
+                    'afternoon': 'morning',
+                    'night': 'morning',
+                    'placeholder': 'Enter city name',
+                    'btn': 'Search',
+                    'lat': 'Latitude',
+                    'lon': 'Longitude'
                 }
             },
             ru: {
                 translation: {
-                    "first": "привет мир"
+                    "feelsLike": "Ощущается:",
+                    'wind': 'Ветер:',
+                    'humidity': 'Влажность:',
+                    'morning': 'утро',
+                    'afternoon': 'день',
+                    'night': 'ночь',
+                    'placeholder': 'Введите название города',
+                    'btn': 'Искать',
+                    'lat': 'Ширина',
+                    'lon': 'Долгота'
                 }
             }
         }
+    }, function (err, t) {
+        // init set content
+        updateContent();
     });
 
-    const handleForecastIcon = (conditionInformation, iconEl) => {
-        switch (conditionInformation) {
-            case ("Partly Cloudy"):
-                iconEl.src = '/public/icons/partly.png'
-                break;
+    function updateContent() {
+        feelsLike.parentElement.textContent = i18next.t('feelsLike');
+        // document.getElementById('saveBtn').innerHTML = i18next.t('common:button.save', { count: Math.floor(Math.random() * 2 + 1) });
 
-            case ("Sunny"):
-                iconEl.src = '/public/icons/sunny.png'
-                break;
-
-            case ("Cloudy"):
-                iconEl.src = '/public/icons/cloud.png'
-                break;
-
-            case ("Clear"):
-                iconEl.src = '/public/icons/clear.png'
-                break;
-
-            case ("Mist"):
-                iconEl.src = '/public/icons/fog.png'
-                break;
-        }
+        // document.getElementById('info').innerHTML = `detected user language: "${i18next.language}"  --> loaded languages: "${i18next.languages.join(', ')}"`;
     }
+
+    function changeLng(lng) {
+        i18next.changeLanguage(lng);
+    }
+
+    // i18next.on('languageChanged', () => {
+    //     updateContent();
+    // });
+
+
+
+    languageChange.addEventListener('change', (evt) => {
+        if (evt.target.value === 'ru') {
+            i18next.changeLng('ru')
+        }
+    })
 
 
     const yourLocationWeather = () => {
@@ -79,6 +100,7 @@ window.addEventListener('DOMContentLoaded', () => {
             navigator.geolocation.getCurrentPosition((position) => {
                 fetchData(`${position.coords.latitude}, ${position.coords.longitude}`);
             });
+
         }
 
         function error() {
@@ -149,13 +171,13 @@ window.addEventListener('DOMContentLoaded', () => {
 
     if (localStorage.getItem('preferredDeg') === 'fahr') {
         fahrsToggle.checked = true;
-        controlBtns.forEach(el => {
-            el.classList.remove('active_btn')
-        })
         fahrsToggle.classList.add('active_btn')
+        celsToggle.classList.remove('active_btn')
 
     } else {
         celsToggle.checked = true;
+        fahrsToggle.classList.remove('active_btn')
+        celsToggle.classList.add('active_btn')
     }
 
     controlBtns.forEach(btn => {
@@ -216,40 +238,31 @@ window.addEventListener('DOMContentLoaded', () => {
             forecastday
         }
 
+        switch (store.condition.text) {
+            case ("Partly cloudy"):
+                weatherIcon.src = '/public/icons/partly.png'
+                break;
 
+            case ("Sunny"):
+                weatherIcon.src = '/public/icons/sunny.png'
+                break;
 
+            case ("Cloudy"):
+                weatherIcon.src = '/public/icons/cloud.png'
+                break;
 
-        handleForecastIcon(store.condition.text, weatherIcon)
-        // handleForecastIcon(store.forecastday[0].hour[0].condition.text, forecastIcons[0])
-        // handleForecastIcon(store.forecastday[0].hour[12].condition.text, forecastIcons[1])
-        // handleForecastIcon(store.forecastday[0].hour[21].condition.text, forecastIcons[2])
+            case ("Clear"):
+                weatherIcon.src = '/public/icons/clear.png'
+                break;
+
+            case ("Mist"):
+                weatherIcon.src = '/public/icons/fog.png'
+                break;
+        }
 
         forecastIcons[0].src = store.forecastday[0].hour[0].condition.icon
         forecastIcons[1].src = store.forecastday[0].hour[12].condition.icon
         forecastIcons[2].src = store.forecastday[0].hour[21].condition.icon
-
-        console.log(store.forecastday[0].hour[12].condition.text)
-        // switch (conditionInformation) {
-        //     case ("Partly cloudy"):
-        //         weatherIcon.src = '/public/icons/partly.png'
-        //         break;
-
-        //     case ("Sunny"):
-        //         weatherIcon.src = '/public/icons/sunny.png'
-        //         break;
-
-        //     case ("Cloudy"):
-        //         weatherIcon.src = '/public/icons/cloud.png'
-        //         break;
-
-        //     case ("Clear"):
-        //         weatherIcon.src = '/public/icons/clear.png'
-        //         break;
-
-        //     case ("Mist"):
-        //         weatherIcon.src = '/public/icons/fog.png'
-        //         break;
-        // }
 
         weatherDescription.textContent = store.condition.text
         date.textContent = formatDate(store.localtime.split(' ')[0])
@@ -259,6 +272,7 @@ window.addEventListener('DOMContentLoaded', () => {
         time.textContent = store.localtime.split(' ')[1]
         windSpeed.textContent = store.wind_kph + ' kph'
         humidityNum.textContent = store.humidity + '%'
+        localStorage.setItem('lastLocation', store.city)
 
         if (fahrsToggle.checked) {
             feelsLike.textContent = trimDegrees(store.feelslike_f)
@@ -278,7 +292,13 @@ window.addEventListener('DOMContentLoaded', () => {
         updateMap(store.lat, store.lon);
     }
 
-    fetchData('Moscow')
+    console.log(fetchData('Moscow'))
+
+    if (localStorage.getItem('lastLocation') !== '' && localStorage.getItem('lastLocation') !== null) {
+        fetchData(localStorage.getItem('lastLocation'))
+    } else {
+        fetchData('Moscow')
+    }
 
     locationForm.addEventListener('submit', (evt) => {
         evt.preventDefault()
