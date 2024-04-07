@@ -219,82 +219,86 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 
     const fetchData = async (cityInp) => {
-        const res = await fetch(apiLink + cityInp)
-        const newData = await res.json()
+        try {
+            const res = await fetch(apiLink + cityInp)
+            const newData = await res.json()
 
-        let { current: { feelslike_c, feelslike_f, temp_f, temp_c, wind_kph, humidity, condition: text },
-            location: {
-                name: city, country, lat, lon, localtime
-            },
-            forecast: { forecastday }
-        } = newData
+            let { current: { feelslike_c, feelslike_f, temp_f, temp_c, wind_kph, humidity, condition: text },
+                location: {
+                    name: city, country, lat, lon, localtime
+                },
+                forecast: { forecastday }
+            } = newData
 
-        store = {
-            ...store,
-            city,
-            country,
-            feelslike_c,
-            feelslike_f,
-            temp_f,
-            temp_c,
-            wind_kph,
-            humidity,
-            lat,
-            lon,
-            localtime,
-            condition: text,
-            forecastday
-        }
+            store = {
+                ...store,
+                city,
+                country,
+                feelslike_c,
+                feelslike_f,
+                temp_f,
+                temp_c,
+                wind_kph,
+                humidity,
+                lat,
+                lon,
+                localtime,
+                condition: text,
+                forecastday
+            }
 
-        switch (store.condition.text) {
-            case ("Partly cloudy"):
-                weatherIcon.src = '/public/icons/partly.png'
-                break;
+            switch (store.condition.text) {
+                case ("Partly cloudy"):
+                    weatherIcon.src = '/public/icons/partly.png'
+                    break;
 
-            case ("Sunny"):
-                weatherIcon.src = '/public/icons/sunny.png'
-                break;
+                case ("Sunny"):
+                    weatherIcon.src = '/public/icons/sunny.png'
+                    break;
 
-            case ("Cloudy"):
-                weatherIcon.src = '/public/icons/cloud.png'
-                break;
+                case ("Cloudy"):
+                    weatherIcon.src = '/public/icons/cloud.png'
+                    break;
 
-            case ("Clear"):
-                weatherIcon.src = '/public/icons/clear.png'
-                break;
+                case ("Clear"):
+                    weatherIcon.src = '/public/icons/clear.png'
+                    break;
 
-            case ("Mist"):
-                weatherIcon.src = '/public/icons/fog.png'
-                break;
-        }
+                case ("Mist"):
+                    weatherIcon.src = '/public/icons/fog.png'
+                    break;
+            }
 
-        forecastIcons[0].src = store.forecastday[0].hour[0].condition.icon
-        forecastIcons[1].src = store.forecastday[0].hour[12].condition.icon
-        forecastIcons[2].src = store.forecastday[0].hour[21].condition.icon
+            forecastIcons[0].src = store.forecastday[0].hour[0].condition.icon
+            forecastIcons[1].src = store.forecastday[0].hour[12].condition.icon
+            forecastIcons[2].src = store.forecastday[0].hour[21].condition.icon
 
-        weatherDescription.textContent = store.condition.text
-        date.textContent = formatDate(store.localtime.split(' ')[0])
-        cityName.textContent = store.city
-        latitude.textContent = store.lat
-        longitude.textContent = store.lon
-        time.textContent = store.localtime.split(' ')[1]
-        windSpeed.textContent = store.wind_kph + ' kph'
-        humidityNum.textContent = store.humidity + '%'
+            weatherDescription.textContent = store.condition.text
+            date.textContent = formatDate(store.localtime.split(' ')[0])
+            cityName.textContent = store.city
+            latitude.textContent = store.lat
+            longitude.textContent = store.lon
+            time.textContent = store.localtime.split(' ')[1]
+            windSpeed.textContent = store.wind_kph + ' kph'
+            humidityNum.textContent = store.humidity + '%'
 
-        if (fahrsToggle.checked) {
-            feelsLike.textContent = trimDegrees(store.feelslike_f)
-            weatherNum.textContent = trimDegrees(store.temp_f)
+            if (fahrsToggle.checked) {
+                feelsLike.textContent = trimDegrees(store.feelslike_f)
+                weatherNum.textContent = trimDegrees(store.temp_f)
 
-            daytimeCond[0].textContent = trimDegrees(store.forecastday[0].hour[0].temp_f)
-            daytimeCond[1].textContent = trimDegrees(store.forecastday[0].hour[12].temp_f)
-            daytimeCond[2].textContent = trimDegrees(store.forecastday[0].hour[21].temp_f)
-        } else {
-            feelsLike.textContent = trimDegrees(store.feelslike_c)
-            weatherNum.textContent = trimDegrees(store.temp_c)
+                daytimeCond[0].textContent = trimDegrees(store.forecastday[0].hour[0].temp_f)
+                daytimeCond[1].textContent = trimDegrees(store.forecastday[0].hour[12].temp_f)
+                daytimeCond[2].textContent = trimDegrees(store.forecastday[0].hour[21].temp_f)
+            } else {
+                feelsLike.textContent = trimDegrees(store.feelslike_c)
+                weatherNum.textContent = trimDegrees(store.temp_c)
 
-            daytimeCond[0].textContent = trimDegrees(store.forecastday[0].hour[0].temp_c)
-            daytimeCond[1].textContent = trimDegrees(store.forecastday[0].hour[12].temp_c)
-            daytimeCond[2].textContent = trimDegrees(store.forecastday[0].hour[21].temp_c)
+                daytimeCond[0].textContent = trimDegrees(store.forecastday[0].hour[0].temp_c)
+                daytimeCond[1].textContent = trimDegrees(store.forecastday[0].hour[12].temp_c)
+                daytimeCond[2].textContent = trimDegrees(store.forecastday[0].hour[21].temp_c)
+            }
+        } catch (error) {
+            console.log(`Error occured ${error}`)
         }
         updateMap(store.lat, store.lon);
     }
